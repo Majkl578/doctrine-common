@@ -260,6 +260,8 @@ class <proxyShortClassName> extends \<className> implements \<baseProxyInterface
      */
     public function generateProxyClass(ClassMetadata $class, $fileName = false)
     {
+        $this->verifyClassValidnessForProxy($class);
+
         preg_match_all('(<([a-zA-Z]+)>)', $this->proxyClassTemplate, $placeholderMatches);
 
         $placeholderMatches = array_combine($placeholderMatches[0], $placeholderMatches[1]);
@@ -304,6 +306,17 @@ class <proxyShortClassName> extends \<className> implements \<baseProxyInterface
         file_put_contents($tmpFileName, $proxyCode);
         @chmod($tmpFileName, 0664);
         rename($tmpFileName, $fileName);
+    }
+
+    private function verifyClassValidnessForProxy(ClassMetadata $class)
+    {
+        if ($class->getReflectionClass()->isFinal()) {
+            throw InvalidArgumentException::classMustNotBeFinal($class->getName());
+        }
+
+        if ($class->getReflectionClass()->isAbstract()) {
+            throw InvalidArgumentException::classMustNotBeAbstract($class->getName());
+        }
     }
 
     /**
