@@ -23,6 +23,9 @@
     "require-dev": {
         "phpunit/phpunit": "^5.7"
     },
+    "provide": {
+        "doctrine/event-manager": "1.0.0"
+    },
     "autoload": {
         "psr-4": {
             "Doctrine\\Common\\": "lib/Doctrine/Common"
